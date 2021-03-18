@@ -9,8 +9,7 @@ export default function Account() {
     const [login,setLogin] =useState(null)
 
     useEffect(() => {
-        const user = getCurrentUser()
-        user ? setLogin(true) :setLogin(false)
+        setLogin(isUserLogged())
     }, [])
 
     if(login == null){
