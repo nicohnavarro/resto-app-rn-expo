@@ -1,7 +1,8 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, View, Image} from "react-native";
+import { ScrollView, StyleSheet, Text, View, Image } from "react-native";
 import { Divider, Button } from "react-native-elements";
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
+import LoginForm from "../../components/account/LoginForm";
 
 export default function Login() {
   return (
@@ -12,27 +13,24 @@ export default function Login() {
         style={styles.image}
       />
       <View style={styles.container}>
-        <Text>Usuario:</Text>
-        <Text>Contrasena:</Text>
+        <LoginForm />
+        <CreateAccount />
       </View>
-      <Button
-                title="Ingresar"
-                buttonStyle={styles.button}
-                onPress={()=>console.log("login")}
-            />
       <Divider style={styles.divider} />
-      <CreateAccount />
     </ScrollView>
   );
 }
 
 function CreateAccount(props) {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   return (
-    <Text style={styles.register} onPress={() => navigation.navigate("register")}>
+    <Text
+      style={styles.register}
+      onPress={() => navigation.navigate("register")}
+    >
       Aun no tienes una cuenta?
-      <Text style={styles.btnRegister}>Registrate</Text>
+      <Text style={styles.btnRegister}>&nbsp;Registrate</Text>
     </Text>
   );
 }
@@ -41,7 +39,8 @@ const styles = StyleSheet.create({
   image: {
     height: 150,
     width: "100%",
-    marginBottom: 20,
+    marginVertical: 40,
+
   },
   container: {
     marginHorizontal: 40,
@@ -51,7 +50,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#438282",
   },
   register: {
-    marginTop: 15,
+    marginTop: 30,
     marginHorizontal: 10,
     alignItems: "center",
   },
@@ -59,9 +58,9 @@ const styles = StyleSheet.create({
     color: "#a3bf45",
     fontWeight: "bold",
   },
-  button : {
+  button: {
     backgroundColor: "#a3bf45",
     marginTop: 10,
-    marginHorizontal:20
-}
+    marginHorizontal: 20,
+  },
 });
