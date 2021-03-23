@@ -3,10 +3,11 @@ import { ScrollView, StyleSheet, Text, View, Image } from "react-native";
 import { Divider, Button } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import LoginForm from "../../components/account/LoginForm";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function Login() {
   return (
-    <ScrollView>
+    <KeyboardAwareScrollView contentContainerStyle={styles.container}>
       <Image
         source={require("../../assets/logo.png")}
         resizeMode="contain"
@@ -17,7 +18,7 @@ export default function Login() {
         <CreateAccount />
       </View>
       <Divider style={styles.divider} />
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 }
 
@@ -40,10 +41,10 @@ const styles = StyleSheet.create({
     height: 150,
     width: "100%",
     marginVertical: 40,
-
   },
   container: {
     marginHorizontal: 40,
+    textAlign:'center'
   },
   divider: {
     margin: 40,
@@ -53,6 +54,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginHorizontal: 10,
     alignItems: "center",
+    textAlign: "center"
   },
   btnRegister: {
     color: "#a3bf45",

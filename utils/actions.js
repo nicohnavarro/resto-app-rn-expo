@@ -33,14 +33,14 @@ export const registerUser = async (correo,clave)=>{
     return result
 }
 
-export const loginUser = async (correo,clave)=>{
+export const loginWithEmailAndPassword = async (correo,clave)=>{
     const result = {statusResponse:true,error:null}
     try {
-        await firebase.auth().createUserWithEmailAndPassword(correo,clave)
+        await firebase.auth().signInWithEmailAndPassword(correo,clave)
     } catch (error) {
         console.info(error)
         result.statusResponse=false
-        result.error = "Este correo ya fue registrado."
+        result.error = "Usuario o clave invalida"
     }
 
     return result

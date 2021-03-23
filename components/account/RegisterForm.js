@@ -33,8 +33,6 @@ export default function RegisterForm() {
     }
 
     navigator.navigate("account")
-
-    console.log("yh");
   };
 
   const validateData = () => {
