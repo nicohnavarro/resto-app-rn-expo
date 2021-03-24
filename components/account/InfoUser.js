@@ -6,7 +6,7 @@ import { updateProfile, uploadImage } from "../../utils/actions";
 import { loadImageFromGallery } from "../../utils/helpers";
 
 export default function InfoUser({ user, setLoading, setLoadingText }) {
-  const [photoUrl, setPhotoUrl] = useState(null);
+  const [photoUrl, setPhotoUrl] = useState(user.photoURL);
   const changePhoto = async () => {
     const result = await loadImageFromGallery([1, 1]);
     if (!result.status) {
