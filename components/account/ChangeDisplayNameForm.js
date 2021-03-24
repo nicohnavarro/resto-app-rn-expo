@@ -23,11 +23,11 @@ export default function ChangeDisplayNameForm({
     const result = await updateProfile({ displayName: newDisplayName });
     setLoading(false);
     if (!result.statusResponse) {
-      setError("Error al actualizar nombre y apellido");
+      setError("Error al actualizar nombre y apellido.");
       return;
     }
     setReloadUser(true);
-    toastRef.current.show("Se han actualizado nombre y apellido",2000)
+    toastRef.current.show("Se han actualizado nombre y apellido.",2000)
     setShowModal(false);
   };
 
@@ -35,12 +35,12 @@ export default function ChangeDisplayNameForm({
     setError(null);
 
     if (isEmpty(newDisplayName)) {
-      setError("Debes ingresar nombre y apellidos");
+      setError("Debes ingresar nombre y apellidos.");
       return false;
     }
 
     if (newDisplayName === displayName) {
-      setError("Debes ingresar numbres y apellidos diferentes a los actuales");
+      setError("Debes ingresar numbres y apellidos diferentes a los actuales.");
       return false;
     }
 
@@ -66,6 +66,7 @@ export default function ChangeDisplayNameForm({
         containerStyle={styles.btnContainer}
         buttonStyle={styles.btn}
         onPress={onSubmit}
+        loading={loading}
       />
     </View>
   );
