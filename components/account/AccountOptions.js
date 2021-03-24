@@ -6,6 +6,7 @@ import { map } from "lodash";
 import Modal from "../Modal";
 import ChangeDisplayNameForm from "./ChangeDisplayNameForm";
 import ChangeEmailForm from "./ChangeEmailForm";
+import ChangePasswordForm from "./ChangePasswordForm";
 
 export default function AccountOptions({ user, toastRef, setReloadUser }) {
   const [showModal, setShowModal] = useState(false);
@@ -63,7 +64,13 @@ export default function AccountOptions({ user, toastRef, setReloadUser }) {
         );
         break;
       case "clave":
-        setRenderComponent(<Text>password</Text>);
+        setRenderComponent(
+          <ChangePasswordForm
+            setShowModal={setShowModal}
+            toastRef={toastRef}
+            setReloadUser={setReloadUser}
+          />
+        );
         break;
     }
     setShowModal(true);

@@ -12,7 +12,16 @@ export default function AccountStack() {
             <Stack.Screen
                 name="account"
                 component={Account}
-                options={{title:"Cuenta"}}
+                options={{
+                    title: 'Cuenta',
+                    headerStyle: {
+                      backgroundColor: '#a3bf45',
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                      fontWeight: 'bold',
+                    },
+                  }}
             />
             <Stack.Screen
                 name="login"

@@ -56,7 +56,7 @@ export default function UserLogged() {
         //   />
         // }
       />
-      <Toast ref={toastRef} position="center" opacity={0.8} />
+      <Toast ref={toastRef} style={{backgroundColor:'green'}} position="center" opacity={0.8} />
       <Loading isVisible={loading} text={loadingText} />
     </View>
   );

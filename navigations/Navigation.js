@@ -66,7 +66,7 @@ export default function Navigation() {
         <Tab.Screen name="search" 
           component={SearchStack} 
           options={{title:"Busqueda"}} />
-        <Tab.Screen name="account" 
+        <Tab.Screen name="account"
           component={AccountStack} 
           options={{title:"Cuenta"}} />
       </Tab.Navigator>
