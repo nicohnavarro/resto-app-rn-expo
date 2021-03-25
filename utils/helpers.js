@@ -1,5 +1,6 @@
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
+import * as Camera from "expo-camera";
 import { Alert } from "react-native";
 
 export function validateEmail(email) {
@@ -28,6 +29,7 @@ export const loadImageFromGallery = async (array) => {
 
   return response;
 };
+
 
 export const fileToBlog = async (path) => {
   const file = await fetch(path);

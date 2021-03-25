@@ -51,7 +51,7 @@ export default function InfoUser({ user, setLoading, setLoadingText }) {
       />
       <View style={styles.infoUser}>
         <Text style={styles.displayName}>
-          {user.displayName ? user.displayName : "Anomino"}
+          {user.displayName ? user.displayName : "Anonimo"}
         </Text>
         <Text>{user.email}</Text>
       </View>
@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "row",
     backgroundColor: "#f9f9f9",
+    // backgroundColor: "#272b3b",
     paddingVertical: 30,
   },
   avatar: {},
@@ -74,5 +75,6 @@ const styles = StyleSheet.create({
   displayName: {
     fontWeight: "bold",
     paddingBottom: 5,
+    // color:"#ffffff",
   },
 });

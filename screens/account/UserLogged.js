@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
   container: {
     minHeight: "100%",
     backgroundColor: "#f9f9f9",
+    // backgroundColor: "#272b3b",
   },
   btnCloseSession: {
     marginTop: 30,
