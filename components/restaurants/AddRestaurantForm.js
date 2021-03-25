@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import { Input, Button, Icon, Avatar } from "react-native-elements";
 import CountryPicker from "react-native-country-picker-modal";
 import { ScrollView } from "react-native";
-import { map, size } from "lodash";
+import { map, size, filter } from "lodash";
 import { loadImageFromGallery } from "../../utils/helpers";
 
 export default function AddRestaurantForm({
@@ -60,6 +60,28 @@ function UploadImage({ toastRef, imagesSelected, setImagesSelected }) {
     setImagesSelected([...imagesSelected, response.image]);
   };
 
+  const removeImage = (image) => {
+    Alert.alert(
+      "Eliminar Imagen",
+      "Estas seguro que queres borrar esta foto?",
+      [
+        {
+          text: "No",
+          style: "cancel",
+        },
+        {
+          text: "Si",
+          onPress: () => {
+            setImagesSelected(
+              filter(imagesSelected, (imageUrl) => imageUrl !== image)
+            );
+          },
+          style: "",
+        },
+      ],{cancelable:true}
+    );
+  };
+
   return (
     <ScrollView horizontal style={styles.viewImage}>
       {size(imagesSelected) < 7 && (
@@ -72,11 +94,12 @@ function UploadImage({ toastRef, imagesSelected, setImagesSelected }) {
         />
       )}
       {map(imagesSelected, (imageRestaurant, index) => (
-        <Avatar 
+        <Avatar
           key={index}
-          avatarStyle={{borderRadius:20}}
+          avatarStyle={{ borderRadius: 20 }}
           containerStyle={styles.miniatureStyle}
           source={{ uri: imageRestaurant }}
+          onPress={() => removeImage(imageRestaurant)}
         />
       ))}
     </ScrollView>
@@ -208,12 +231,12 @@ const styles = StyleSheet.create({
     height: 80,
     width: 80,
     backgroundColor: "#e3e3e3",
-    borderRadius:20
+    borderRadius: 20,
   },
   miniatureStyle: {
     width: 80,
     height: 80,
     marginRight: 10,
-    borderRadius:20
+    borderRadius: 20,
   },
 });
