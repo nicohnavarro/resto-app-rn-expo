@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Alert, StyleSheet, Text, View } from "react-native";
-import { Input, Button, Icon, Avatar } from "react-native-elements";
+import { Alert, StyleSheet, Text, View, Dimensions, ScrollView } from "react-native";
+import { Input, Button, Icon, Avatar, Image } from "react-native-elements";
 import CountryPicker from "react-native-country-picker-modal";
-import { ScrollView } from "react-native";
 import { map, size, filter } from "lodash";
 import { loadImageFromGallery } from "../../utils/helpers";
+
+const widthScreen = Dimensions.get("window").width;
 
 export default function AddRestaurantForm({
   toastRef,
@@ -26,7 +27,8 @@ export default function AddRestaurantForm({
   };
 
   return (
-    <View style={styles.viewContainer}>
+    <ScrollView style={styles.viewContainer}>
+      <ImageRestaurant imageRestaurant={imagesSelected[0]}/>
       <FormAdd
         formData={formData}
         setFormData={setFormData}
@@ -46,11 +48,20 @@ export default function AddRestaurantForm({
         onPress={addRestaurant}
         buttonStyle={styles.btnAddResto}
       />
-    </View>
+    </ScrollView>
   );
 }
 
+function ImageRestaurant({ imageRestaurant}){
+  return (
+    <View style={styles.viewPhoto}>
+      <Image  style={{width: widthScreen, height:250, borderBottomLeftRadius:25, borderBottomRightRadius:25}} source={imageRestaurant ? {uri: imageRestaurant}: require("../../assets/avatardefault.png")}/>
+    </View>
+  )
+}
+
 function UploadImage({ toastRef, imagesSelected, setImagesSelected }) {
+
   const selectImage = async () => {
     const response = await loadImageFromGallery([4, 3]);
     if (!response.status) {
@@ -78,7 +89,8 @@ function UploadImage({ toastRef, imagesSelected, setImagesSelected }) {
           },
           style: "",
         },
-      ],{cancelable:true}
+      ],
+      { cancelable: true }
     );
   };
 
@@ -198,7 +210,6 @@ const defaultFormValues = () => {
 const styles = StyleSheet.create({
   viewContainer: {
     height: "100%",
-    marginTop: 20,
   },
   viewForm: {
     marginHorizontal: 10,
@@ -239,4 +250,9 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderRadius: 20,
   },
+  viewPhoto:{
+    alignItems:"center",
+    height:250,
+    marginBottom:20,
+  }
 });
