@@ -1,9 +1,18 @@
 import React, { useState } from "react";
-import { Alert, StyleSheet, Text, View, Dimensions, ScrollView } from "react-native";
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  ScrollView,
+  InputAccessoryView,
+} from "react-native";
 import { Input, Button, Icon, Avatar, Image } from "react-native-elements";
 import CountryPicker from "react-native-country-picker-modal";
 import { map, size, filter } from "lodash";
 import { loadImageFromGallery } from "../../utils/helpers";
+import Modal from '../Modal';
 
 const widthScreen = Dimensions.get("window").width;
 
@@ -20,6 +29,8 @@ export default function AddRestaurantForm({
   const [errorAddress, setErrorAddress] = useState(null);
   const [errorPhone, setErrorPhone] = useState(null);
   const [imagesSelected, setImagesSelected] = useState([]);
+  const [isVisibleMap, setIsVisibleMap] = useState(false);
+  const [locationRestaurant, setLocationRestaurant] = useState(null);
 
   const addRestaurant = () => {
     console.log(formData);
@@ -28,7 +39,7 @@ export default function AddRestaurantForm({
 
   return (
     <ScrollView style={styles.viewContainer}>
-      <ImageRestaurant imageRestaurant={imagesSelected[0]}/>
+      <ImageRestaurant imageRestaurant={imagesSelected[0]} />
       <FormAdd
         formData={formData}
         setFormData={setFormData}
@@ -37,6 +48,7 @@ export default function AddRestaurantForm({
         errorEmail={errorEmail}
         errorAddress={errorAddress}
         errorPhone={errorPhone}
+        setIsVisibleMap={setIsVisibleMap}
       />
       <UploadImage
         toastRef={toastRef}
@@ -48,20 +60,50 @@ export default function AddRestaurantForm({
         onPress={addRestaurant}
         buttonStyle={styles.btnAddResto}
       />
+      <MapRestaurant
+        isVisibleMap={isVisibleMap}
+        setIsVisibleMap={setIsVisibleMap}
+        setLocationRestaurant={setLocationRestaurant}
+        toastRef={toastRef}
+      />
     </ScrollView>
   );
 }
 
-function ImageRestaurant({ imageRestaurant}){
+function MapRestaurant({
+  isVisibleMap,
+  setIsVisibleMap,
+  setLocationRestaurant,
+  toastRef,
+}) {
+  return (
+    <Modal isVisible={isVisibleMap} setIsVisible={setIsVisibleMap}>
+      <Text>map goes here!</Text>
+    </Modal>
+  );
+}
+
+function ImageRestaurant({ imageRestaurant }) {
   return (
     <View style={styles.viewPhoto}>
-      <Image  style={{width: widthScreen, height:250, borderBottomLeftRadius:25, borderBottomRightRadius:25}} source={imageRestaurant ? {uri: imageRestaurant}: require("../../assets/avatardefault.png")}/>
+      <Image
+        style={{
+          width: widthScreen,
+          height: 250,
+          borderBottomLeftRadius: 25,
+          borderBottomRightRadius: 25,
+        }}
+        source={
+          imageRestaurant
+            ? { uri: imageRestaurant }
+            : require("../../assets/avatardefault.png")
+        }
+      />
     </View>
-  )
+  );
 }
 
 function UploadImage({ toastRef, imagesSelected, setImagesSelected }) {
-
   const selectImage = async () => {
     const response = await loadImageFromGallery([4, 3]);
     if (!response.status) {
@@ -126,6 +168,7 @@ function FormAdd({
   errorEmail,
   errorAddress,
   errorPhone,
+  setIsVisibleMap
 }) {
   const [country, setCountry] = useState("AR");
   const [callingCode, setCallingCode] = useState("54");
@@ -155,6 +198,12 @@ function FormAdd({
         defaultValue={formData.email}
         onChange={(e) => onChangeInput(e, "email")}
         errorMessage={errorEmail}
+        rightIcon={{
+          type: "material-community",
+          name: "google-maps",
+          color: "#c2c2c2",
+          onPress: () => setIsVisibleMap(true),
+        }}
       />
       <View style={styles.phoneView}>
         <CountryPicker
@@ -250,9 +299,9 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderRadius: 20,
   },
-  viewPhoto:{
-    alignItems:"center",
-    height:250,
-    marginBottom:20,
-  }
+  viewPhoto: {
+    alignItems: "center",
+    height: 250,
+    marginBottom: 20,
+  },
 });
