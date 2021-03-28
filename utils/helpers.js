@@ -46,10 +46,10 @@ export const getCurrentLocation = async () => {
   }
   const position = await Location.getCurrentPositionAsync();
   const location = {
-    latitud: position.coords.latitude,
-    longitud: position.coords.longitude,
-    latitudDelta: 0.001,
-    longitudDelta: 0.001,
+    latitude: position.coords.latitude,
+    longitude: position.coords.longitude,
+    latitudeDelta: 0.001,
+    longitudeDelta: 0.001,
   };
   response.status = true;
   response.location = location;

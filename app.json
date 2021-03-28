@@ -17,12 +17,19 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier":"com.nicohnavarro.restaurants"
     },
     "android": {
+      "package": "com.nicohnavarro.restaurants", 
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
+      },
+      "config": {
+        "googleMaps":{
+          "apiKey":"AIzaSyBkCETvCgZ7gwgkZ6CTJfo8Ja8rBZKVOSw"
+        }
       },
       "permissions":[
         "CAMERA_ROLL",
