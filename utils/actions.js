@@ -74,11 +74,13 @@ export const updateProfile = async (data) => {
   return result;
 };
 
-
 export const reauthenticate = async (password) => {
   const result = { statusResponse: true, error: null };
-  const user= getCurrentUser();
-  const credentials = firebase.auth.EmailAuthProvider.credential(user.email,password)
+  const user = getCurrentUser();
+  const credentials = firebase.auth.EmailAuthProvider.credential(
+    user.email,
+    password
+  );
 
   try {
     await user.reauthenticateWithCredential(credentials);
@@ -89,7 +91,7 @@ export const reauthenticate = async (password) => {
   return result;
 };
 
-export const updateEmail= async (email) => {
+export const updateEmail = async (email) => {
   const result = { statusResponse: true, error: null };
   try {
     await firebase.auth().currentUser.updateEmail(email);
@@ -111,13 +113,42 @@ export const updatePassword = async (password) => {
   return result;
 };
 
-export const addDocumentWithoutId = async (collection,data)=>{
+export const addDocumentWithoutId = async (collection, data) => {
   const result = { statusResponse: true, error: null };
   try {
-    await db.collection(collection).add(data)
+    await db.collection(collection).add(data);
   } catch (error) {
     result.statusResponse = false;
     result.error = error;
   }
   return result;
-}
+};
+
+export const getRestaurants = async (limitRestaurants) => {
+  const result = {
+    statusResponse: true,
+    error: null,
+    restaurants: [],
+    startRestaurant: null,
+  };
+  try {
+    const response = await db
+      .collection("restaurants")
+      .orderBy("createAt", "desc")
+      .limit(limitRestaurants)
+      .get();
+    if (response.docs.length > 0) {
+      console.log("actions",response.docs)
+      result.startRestaurant= response.docs[response.docs.length - 1];
+    }
+    response.forEach((doc) => {
+      const restaurant = doc.data();
+      restaurant.id = doc.id;
+      result.restaurants.push(restaurant);
+    });
+  } catch (error) {
+    result.statusResponse = false;
+    result.error = error;
+  }
+  return result;
+};
