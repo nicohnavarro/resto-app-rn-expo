@@ -138,7 +138,6 @@ export const getRestaurants = async (limitRestaurants) => {
       .limit(limitRestaurants)
       .get();
     if (response.docs.length > 0) {
-      console.log("actions",response.docs)
       result.startRestaurant= response.docs[response.docs.length - 1];
     }
     response.forEach((doc) => {

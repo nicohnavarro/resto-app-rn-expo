@@ -44,7 +44,10 @@ export const getCurrentLocation = async () => {
     Alert.alert("Debes dar permisos para tu ubicacion!");
     return response;
   }
+  console.log(resultPermission)
+  console.log(Location);
   const position = await Location.getCurrentPositionAsync();
+  console.log("postion ",position)
   const location = {
     latitude: position.coords.latitude,
     longitude: position.coords.longitude,

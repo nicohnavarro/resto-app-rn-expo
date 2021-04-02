@@ -33,8 +33,6 @@ export default function Restaurants({ navigation }) {
           if (response.statusResponse) {
             setStartRestaurant(response.startRestaurant);
             setRestaurants(response.restaurants);
-            console.log("render", startRestaurant);
-            console.log("resto", restaurants);
           }
           setLoading(false);
         } catch (e) {

@@ -195,6 +195,7 @@ function MapRestaurant({
 
   const confirmLocation = () => {
     setLocationRestaurant(region);
+    console.log(region)
     toastRef.current.show("Localizacion guardada correctamente", 3000);
     setIsVisibleMap(false);
   };
@@ -332,6 +333,8 @@ function FormAdd({
   const onChangeInput = (e, type) => {
     setFormData({ ...formData, [type]: e.nativeEvent.text });
   };
+
+  console.log("location", locationRestaurant)
 
   return (
     <View style={styles.viewForm}>

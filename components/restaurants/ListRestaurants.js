@@ -4,13 +4,13 @@ import {
   Text,
   View,
   FlatList,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
-import { Image, ActivityIndicator } from "react-native-elements";
+import { Image } from "react-native-elements";
 import { size } from "lodash";
 
 export default function ListRestaurants({ restaurants, navigation }) {
-  console.log("list",restaurants)
   return (
     <View>
       <FlatList
@@ -36,7 +36,6 @@ function Restaurant({ restaurant, navigation }) {
     callingCode,
   } = restaurant.item;
   const imageRestaurant = images[0];
-  console.log("resto", restaurant);
 
   return (
     <TouchableOpacity>
@@ -44,7 +43,7 @@ function Restaurant({ restaurant, navigation }) {
         <View style={styles.viewRestoImage}>
           <Image
             resizeMode="cover"
-            // PlaceholderContent={<ActivityIndicator color="#fff" />}
+            PlaceholderContent={<ActivityIndicator color="#fff" />}
             source={{ uri: imageRestaurant }}
             style={styles.imageResto}
           />
