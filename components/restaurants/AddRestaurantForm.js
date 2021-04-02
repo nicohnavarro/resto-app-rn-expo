@@ -96,9 +96,7 @@ export default function AddRestaurantForm({
     setLoading(true);
     const responseUploadImages = await uploadImages();
     const restaurant = buildRestaurant(responseUploadImages);
-    console.log('resto',restaurant);
     const responseDoc = await addDocumentWithoutId("restaurants", restaurant);
-    console.log('doc',responseDoc);
     setLoading(false);
     if (!responseDoc.statusResponse) {
       toastRef.current.show(
@@ -195,7 +193,6 @@ function MapRestaurant({
 
   const confirmLocation = () => {
     setLocationRestaurant(region);
-    console.log(region)
     toastRef.current.show("Localizacion guardada correctamente", 3000);
     setIsVisibleMap(false);
   };
@@ -333,8 +330,6 @@ function FormAdd({
   const onChangeInput = (e, type) => {
     setFormData({ ...formData, [type]: e.nativeEvent.text });
   };
-
-  console.log("location", locationRestaurant)
 
   return (
     <View style={styles.viewForm}>
