@@ -5,7 +5,7 @@ import { useFocusEffect } from "@react-navigation/native";
 
 import Loading from "../../components/Loading";
 import firebase from "firebase/app";
-import { getRestaurants } from "../../utils/actions";
+import { getMoreRestaurants, getRestaurants } from "../../utils/actions";
 import ListRestaurants from "../../components/restaurants/ListRestaurants";
 import { size } from "lodash";
 
@@ -57,6 +57,19 @@ export default function Restaurants({ navigation }) {
   //     setLoading(false);
   //   }, [])
   // );
+  const handleLoadMore = async () => {
+    if (!startRestaurant) {
+      return;
+    }
+    setLoading(true);
+    const response = await getMoreRestaurants(limitRestaurants,startRestaurant);
+
+    if (response.statusResponse) {
+      setStartRestaurant(response.startRestaurant);
+      setRestaurants(...restaurants,...response.restaurants);
+    }
+    setLoading(false);
+  };
 
   if (user === null) {
     return <Loading isVisible={true} text="Cargando..." />;
@@ -65,7 +78,7 @@ export default function Restaurants({ navigation }) {
   return (
     <View style={styles.viewBody}>
       {size(restaurants) > 0 ? (
-        <ListRestaurants restaurants={restaurants} navigation={navigation} />
+        <ListRestaurants restaurants={restaurants} handleLoadMore={handleLoadMore} navigation={navigation} />
       ) : (
         <View style={styles.notFoundView}>
           <Text style={styles.notFoundText}>
