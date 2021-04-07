@@ -11,7 +11,11 @@ import { Image } from "react-native-elements";
 import { size } from "lodash";
 import { formatPhone } from "../../utils/helpers";
 
-export default function ListRestaurants({ restaurants, navigation, handleLoadMore}) {
+export default function ListRestaurants({
+  restaurants,
+  navigation,
+  handleLoadMore,
+}) {
   return (
     <View>
       <FlatList
@@ -39,8 +43,11 @@ function Restaurant({ restaurant, navigation, handleLoadMore }) {
   } = restaurant.item;
   const imageRestaurant = images[0];
 
+  const goRestaurant = () => {
+    navigation.navigate("restaurant",{id, name});
+  };
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={goRestaurant}>
       <View style={styles.viewResto}>
         <View style={styles.viewRestoImage}>
           <Image
@@ -54,7 +61,7 @@ function Restaurant({ restaurant, navigation, handleLoadMore }) {
           <Text style={styles.restoTitle}>{name}</Text>
           <Text style={styles.restoInfo}>{address}</Text>
           <Text style={styles.restoInfo}>
-            {formatPhone(callingCode,phone)}
+            {formatPhone(callingCode, phone)}
           </Text>
           <Text style={styles.restoDescription}>
             {size(description) > 30
@@ -71,7 +78,6 @@ const styles = StyleSheet.create({
   viewResto: {
     flexDirection: "row",
     margin: 10,
-    
   },
   viewRestoImage: {
     margin: 10,
