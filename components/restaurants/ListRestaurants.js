@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Image } from "react-native-elements";
 import { size } from "lodash";
+import { formatPhone } from "../../utils/helpers";
 
 export default function ListRestaurants({ restaurants, navigation, handleLoadMore}) {
   return (
@@ -53,7 +54,7 @@ function Restaurant({ restaurant, navigation, handleLoadMore }) {
           <Text style={styles.restoTitle}>{name}</Text>
           <Text style={styles.restoInfo}>{address}</Text>
           <Text style={styles.restoInfo}>
-            {callingCode}-{phone}
+            {formatPhone(callingCode,phone)}
           </Text>
           <Text style={styles.restoDescription}>
             {size(description) > 30
