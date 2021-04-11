@@ -10,7 +10,7 @@ export default function Restaurant({ navigation, route }) {
   navigation.setOptions({ title: name });
 
   useEffect(() => {
-    async () => {
+    (async () => {
       const response = await getDocumentById("restaurants", id);
       if (response.statusResponse === true) {
         setRestaurant(response.document);
@@ -20,7 +20,7 @@ export default function Restaurant({ navigation, route }) {
           "Ocurrio un problema cargando el restaurante, intente mas tarde."
         );
       }
-    };
+    })();
   }, []);
 
   if (!restaurant) {
