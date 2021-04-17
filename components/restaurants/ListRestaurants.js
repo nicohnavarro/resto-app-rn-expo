@@ -21,7 +21,7 @@ export default function ListRestaurants({
       <FlatList
         data={restaurants}
         onEndReachedThreshold={0.5}
-        onEndReached={handleLoadMore}
+        // onEndReached={handleLoadMore}
         keyExtractor={(item, index) => index.toString()}
         renderItem={(restaurant) => (
           <Restaurant restaurant={restaurant} navigation={navigation} />
