@@ -1,9 +1,9 @@
 import { size } from 'lodash'
 import React from 'react'
 import { ActivityIndicator } from 'react-native'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Image } from 'react-native-elements'
-import Carousel, { Pagination, ParallaxImage } from 'react-native-snap-carousel'
+import Carousel, { Pagination } from 'react-native-snap-carousel'
 
 export default function CarouselImages({images, height, width, activeSlide, setActiveSlide}) {
   const renderItem = ({item}) => {
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     height:20,
     borderRadius:10,
     marginHorizontal:2,
-    backgroundColor: "#442484"
+    backgroundColor: "yellow"
   },
   dotInactive:{
     width:14,
