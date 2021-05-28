@@ -116,6 +116,7 @@ export default function AddRestaurantForm({
       phone: formData.phone,
       callingCode: formData.callingCode,
       country: formData.country,
+      email: formData.email,
       description: formData.description,
       location: locationRestaurant,
       images: images,
