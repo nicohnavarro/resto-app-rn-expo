@@ -66,7 +66,7 @@ export default function ListReviews({navigation,idRestaurant}) {
 
 function Review({reviewDoc}){
   const { title, review, createdAt, avatarUser,rating } = reviewDoc;
-  const createReview = new Date(createdAt.seconds * 10000)
+  const createReview = new Date(createdAt.seconds * 1000)
 
   return(
     <View style={styles.viewReview}>
