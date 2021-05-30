@@ -215,14 +215,46 @@ export const getRestaurantsReviews = async (idRestaurant) => {
       .collection("reviews")
       .where("idRestaurant","==",idRestaurant)
       .get();
-    console.log(response);
     response.forEach((doc) => {
       const review = doc.data();
       review.id = doc.id;
       result.reviews.push(review);
     });
   } catch (error) {
-    console.log(error);
+    result.statusResponse = false;
+    result.error = error;
+  }
+  return result;
+};
+
+export const getIsFavorite = async (idRestaurant) => {
+  const result = { statusResponse: true, error: null, isFavorite:false };
+  try {
+    const response = await db.collection("favorites")
+    .where("idRestaurant","==",idRestaurant)
+    .where("idUser","==",getCurrentUser().uid)
+    .get();
+    result.isFavorite = response.docs.length > 0;
+  } catch (error) {
+    result.statusResponse = false;
+    result.error = error;
+  }
+  return result;
+};
+
+export const deleteFavorite = async (idRestaurant) => {
+  const result = { statusResponse: true, error: null};
+  try {
+    const response = await db.collection("favorites")
+    .where("idRestaurant","==",idRestaurant)
+    .where("idUser","==",getCurrentUser().uid)
+    .get();
+    response.forEach(async(doc) => {
+      const favoriteId = doc.id;
+      await db.collection("favorites").doc(favoriteId).delete();
+    })
+    console.log(response);
+  } catch (error) {
     result.statusResponse = false;
     result.error = error;
   }
