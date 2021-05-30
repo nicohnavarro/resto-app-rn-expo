@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { StyleSheet, Text, View, Alert, Dimensions } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Rating, ListItem, Icon} from "react-native-elements";
@@ -9,6 +9,8 @@ import { getDocumentById } from "../../utils/actions";
 import {formatPhone} from '../../utils/helpers';
 import MapRestaurant from '../../components/restaurants/MapRestaurant';
 import { map } from 'lodash';
+import ListReviews from "../../components/restaurants/ListReviews";
+import { useFocusEffect } from '@react-navigation/native';
 
 const widthScreen = Dimensions.get("window").width;
 
@@ -18,8 +20,8 @@ export default function Restaurant({ navigation, route }) {
   const [activeSlide, setActiveSlide] = useState(0);
 
   navigation.setOptions({ title: name });
-
-  useEffect(() => {
+  useFocusEffect(
+    useCallback(() => {
     (async () => {
       const response = await getDocumentById("restaurants", id);
       if (response.statusResponse === true) {
@@ -31,7 +33,7 @@ export default function Restaurant({ navigation, route }) {
         );
       }
     })();
-  }, []);
+  }, []));
 
   if (!restaurant) {
     return <Loading isVisible={true} text="Cargando..." />;
@@ -59,6 +61,7 @@ export default function Restaurant({ navigation, route }) {
         email={restaurant.email}
         phone={formatPhone(restaurant.callingCode,restaurant.phone)}
       />
+      <ListReviews navigation={navigation} idRestaurant={restaurant.id}/>
     </ScrollView>
   );
 }
@@ -79,7 +82,8 @@ function TitleRestaurant({name,description,rating=0}){
   )
 }
 
-function RestaurantInfo({name, location, address ,email ,phone}){
+function 
+RestaurantInfo({name, location, address ,email ,phone}){
   const listInfo = [
     { text: address, iconName:"map-marker"},
     { text: phone, iconName:"phone"},

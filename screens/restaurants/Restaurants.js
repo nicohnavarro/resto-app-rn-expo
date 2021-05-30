@@ -23,7 +23,7 @@ export default function Restaurants({ navigation }) {
   }, []);
 
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       setLoading(true);
 
       const fetchResto = async () => {
