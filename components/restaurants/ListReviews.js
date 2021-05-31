@@ -22,7 +22,6 @@ export default function ListReviews({navigation,idRestaurant}) {
     useCallback(() => {
       (async() =>{
         const response = await getRestaurantsReviews(idRestaurant);
-        console.log(response);
         if(response.statusResponse){
           setReviews(response.reviews)
         }

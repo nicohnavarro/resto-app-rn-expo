@@ -2,6 +2,7 @@ import { firebaseApp } from "./firebase";
 import * as firebase from "firebase";
 import "firebase/firestore";
 import { fileToBlog } from "./helpers";
+import { map } from "lodash";
 
 const db = firebase.firestore(firebaseApp);
 
@@ -253,7 +254,32 @@ export const deleteFavorite = async (idRestaurant) => {
       const favoriteId = doc.id;
       await db.collection("favorites").doc(favoriteId).delete();
     })
-    console.log(response);
+  } catch (error) {
+    result.statusResponse = false;
+    result.error = error;
+  }
+  return result;
+};
+
+export const getFavorites = async () => {
+  const result = { statusResponse: true, error: null, favorites:[]};
+  try {
+    const response = await db.collection("favorites")
+    .where("idUser","==",getCurrentUser().uid)
+    .get();
+    const restaurantsId = [];
+    response.forEach((doc) => {
+      const favorite = doc.data();
+      restaurantsId.push(favorite.idRestaurant);
+    })
+    await Promise.all(
+      map(restaurantsId, async(restaurantId)=>{
+        const responseResto = await getDocumentById("restaurants",restaurantId);
+        if(responseResto.statusResponse){
+          result.favorites.push(responseResto.document);
+        }
+      })
+    )
   } catch (error) {
     result.statusResponse = false;
     result.error = error;

@@ -37,7 +37,6 @@ export default function AddImage({ navigation }) {
       aspect: [1, 1],
       quality: 1,
     });
-    console.log(result);
 
     if (!result.cancelled) {
       setImage(result.uri);

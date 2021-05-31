@@ -23,7 +23,6 @@ export default function AddReviewRestaurant({navigation,route}) {
     }
     setLoading(true);
     const user = getCurrentUser();
-    console.log(user);
     const data = {
       idUser: user.uid,
       avatarUser: user.photoURL,
