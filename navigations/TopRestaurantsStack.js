@@ -10,7 +10,7 @@ export default function TopRestaurantsStack() {
             <Stack.Screen
                 name="topRestaurants"
                 component={TopRestaurants}
-                options={{title:"Podio"}}
+                options={{title:"Los Mejores Restaurantes"}}
             />
         </Stack.Navigator>
     )

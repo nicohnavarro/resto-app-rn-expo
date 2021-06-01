@@ -13,7 +13,7 @@ import { Button, Icon, Image } from "react-native-elements";
 import Toast from "react-native-easy-toast";
 import firebase from "firebase/app";
 import Loading from "../components/Loading";
-import { getFavorites } from "../utils/actions";
+import { deleteFavorite, getFavorites } from "../utils/actions";
 
 export default function Favorites({ navigation }) {
   const toastRef = useRef();
@@ -62,6 +62,7 @@ export default function Favorites({ navigation }) {
               setLoading={setLoading}
               toastRef={toastRef}
               navigation={navigation}
+              setReloadData={setReloadData}
             />
           )}
         />
@@ -78,15 +79,46 @@ export default function Favorites({ navigation }) {
   );
 }
 
-function Restaurant({ restaurant, setLoading, toastRef, navigation }) {
+function Restaurant({ restaurant, setLoading, toastRef, navigation,setReloadData }) {
   const { id, name, images } = restaurant.item;
+
+  const confirmRemoveFavorite = () =>{
+    Alert.alert(
+      "Eliminar restaurante de favoritos",
+      "Esta seguro de querer borrar el restaurant de favoritos?",
+      [
+        {
+          text:"No",
+          style:"cancel"
+        },
+        {
+          text:"Si",
+          onPress: removeFavorite
+        }
+      ],
+      {cancelable:false}
+    )
+  }
+
+  const removeFavorite = async() => {
+    setLoading(true);
+    const response = await deleteFavorite(id);
+    setLoading(false);
+    if(response.statusResponse){
+      setReloadData(true);
+      toastRef.current.show("Restaurante eliminado de favoritos",3000)
+    }else {
+      toastRef.current.show("Error al eliminar Restaurante de favoritos",3000)
+    }
+  }
+
   return (
     <View style={styles.restaurant}>
       <TouchableOpacity
         onPress={() =>
             navigation.navigate("restaurants", {
             screen: "restaurant",
-            params: { id },
+            params: { id, name},
           })
         }
       >
@@ -100,10 +132,11 @@ function Restaurant({ restaurant, setLoading, toastRef, navigation }) {
           <Text style={styles.name}>{name}</Text>
           <Icon
             type="material-community"
-            name="heart"
+            name="trash-can"
             color="#f00"
             containerStyle={styles.favorite}
             underlayColor="transparent"
+            onPress={confirmRemoveFavorite}
           />
         </View>
       </TouchableOpacity>

@@ -62,7 +62,7 @@ export default function Navigation() {
           options={{title:"Favoritos"}} />
         <Tab.Screen name="topRestaurants" 
           component={TopRestaurantsStack} 
-          options={{title:" Podio"}}/>
+          options={{title:"Top 10"}}/>
         <Tab.Screen name="search" 
           component={SearchStack} 
           options={{title:"Busqueda"}} />

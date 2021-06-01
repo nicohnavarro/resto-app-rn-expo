@@ -1,12 +1,34 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { useState, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import { StyleSheet, Text, View } from "react-native";
+import { getMoreRestaurants, getRestaurants, getTopRestaurants } from "../utils/actions";
+import Loading from "../components/Loading";
+import ListTopRestaurants from "../components/ranking/ListTopRestaurants";
 
-export default function TopRestaurants() {
-    return (
-        <View>
-            <Text>Top Resto</Text>
-        </View>
-    )
+export default function TopRestaurants({navigation}) {
+  const [restaurants, setRestaurants] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      async function getData() {
+        setLoading(true);
+        const response = await getTopRestaurants(5);
+        if (response.statusResponse) {
+          setRestaurants(response.restaurants);
+        }
+        setLoading(false);
+      }
+      getData()
+    }, [])
+  )
+
+  return (
+    <View>
+      <ListTopRestaurants restaurants={restaurants} navigation={navigation} />
+      <Loading isVisible={loading} text="Por favor espere ..." />
+    </View>
+  );
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
