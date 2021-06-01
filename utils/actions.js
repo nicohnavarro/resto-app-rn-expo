@@ -267,14 +267,10 @@ export const getFavorites = async () => {
     const response = await db.collection("favorites")
     .where("idUser","==",getCurrentUser().uid)
     .get();
-    const restaurantsId = [];
-    response.forEach((doc) => {
-      const favorite = doc.data();
-      restaurantsId.push(favorite.idRestaurant);
-    })
     await Promise.all(
-      map(restaurantsId, async(restaurantId)=>{
-        const responseResto = await getDocumentById("restaurants",restaurantId);
+      map(reponse.docs, async(doc)=>{
+        const favorite = doc.data();
+        const responseResto = await getDocumentById("restaurants",favorite.idRestaurant);
         if(responseResto.statusResponse){
           result.favorites.push(responseResto.document);
         }
