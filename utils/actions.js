@@ -3,8 +3,10 @@ import * as firebase from "firebase";
 import "firebase/firestore";
 import { fileToBlog } from "./helpers";
 import { map } from "lodash";
+import { FireSQL } from "firesql";
 
 const db = firebase.firestore(firebaseApp);
+const fireSQL = new FireSQL(firebase.firestore(), { includeId: "id" });
 
 export const isUserLogged = () => {
   let isLogged = false;
@@ -137,7 +139,7 @@ export const getRestaurants = async (limitRestaurants) => {
       .limit(limitRestaurants)
       .get();
     if (response.docs.length > 0) {
-      result.startRestaurant= response.docs[response.docs.length - 1];
+      result.startRestaurant = response.docs[response.docs.length - 1];
     }
     response.forEach((doc) => {
       const restaurant = doc.data();
@@ -166,7 +168,7 @@ export const getMoreRestaurants = async (limitRestaurants, startRestaurant) => {
       .limit(limitRestaurants)
       .get();
     if (response.docs.length > 0) {
-      result.startRestaurant= response.docs[response.docs.length - 1];
+      result.startRestaurant = response.docs[response.docs.length - 1];
     }
     response.forEach((doc) => {
       const restaurant = doc.data();
@@ -180,13 +182,12 @@ export const getMoreRestaurants = async (limitRestaurants, startRestaurant) => {
   return result;
 };
 
-
 export const getDocumentById = async (collection, id) => {
-  const result = { statusResponse: true, error: null, document:null };
+  const result = { statusResponse: true, error: null, document: null };
   try {
     const response = await db.collection(collection).doc(id).get();
-    result.document = response.data()
-    result.document.id = response.id
+    result.document = response.data();
+    result.document.id = response.id;
   } catch (error) {
     result.statusResponse = false;
     result.error = error;
@@ -197,8 +198,8 @@ export const getDocumentById = async (collection, id) => {
 export const updateDocument = async (collection, id, data) => {
   const result = { statusResponse: true, error: null };
   try {
-    await db.collection(collection).doc(id).update(data);  
-  }catch (error) {
+    await db.collection(collection).doc(id).update(data);
+  } catch (error) {
     result.statusResponse = false;
     result.error = error;
   }
@@ -209,12 +210,12 @@ export const getRestaurantsReviews = async (idRestaurant) => {
   const result = {
     statusResponse: true,
     error: null,
-    reviews: []
+    reviews: [],
   };
   try {
     const response = await db
       .collection("reviews")
-      .where("idRestaurant","==",idRestaurant)
+      .where("idRestaurant", "==", idRestaurant)
       .get();
     response.forEach((doc) => {
       const review = doc.data();
@@ -229,12 +230,13 @@ export const getRestaurantsReviews = async (idRestaurant) => {
 };
 
 export const getIsFavorite = async (idRestaurant) => {
-  const result = { statusResponse: true, error: null, isFavorite:false };
+  const result = { statusResponse: true, error: null, isFavorite: false };
   try {
-    const response = await db.collection("favorites")
-    .where("idRestaurant","==",idRestaurant)
-    .where("idUser","==",getCurrentUser().uid)
-    .get();
+    const response = await db
+      .collection("favorites")
+      .where("idRestaurant", "==", idRestaurant)
+      .where("idUser", "==", getCurrentUser().uid)
+      .get();
     result.isFavorite = response.docs.length > 0;
   } catch (error) {
     result.statusResponse = false;
@@ -244,16 +246,17 @@ export const getIsFavorite = async (idRestaurant) => {
 };
 
 export const deleteFavorite = async (idRestaurant) => {
-  const result = { statusResponse: true, error: null};
+  const result = { statusResponse: true, error: null };
   try {
-    const response = await db.collection("favorites")
-    .where("idRestaurant","==",idRestaurant)
-    .where("idUser","==",getCurrentUser().uid)
-    .get();
-    response.forEach(async(doc) => {
+    const response = await db
+      .collection("favorites")
+      .where("idRestaurant", "==", idRestaurant)
+      .where("idUser", "==", getCurrentUser().uid)
+      .get();
+    response.forEach(async (doc) => {
       const favoriteId = doc.id;
       await db.collection("favorites").doc(favoriteId).delete();
-    })
+    });
   } catch (error) {
     result.statusResponse = false;
     result.error = error;
@@ -262,20 +265,24 @@ export const deleteFavorite = async (idRestaurant) => {
 };
 
 export const getFavorites = async () => {
-  const result = { statusResponse: true, error: null, favorites:[]};
+  const result = { statusResponse: true, error: null, favorites: [] };
   try {
-    const response = await db.collection("favorites")
-    .where("idUser","==",getCurrentUser().uid)
-    .get();
+    const response = await db
+      .collection("favorites")
+      .where("idUser", "==", getCurrentUser().uid)
+      .get();
     await Promise.all(
-      map(reponse.docs, async(doc)=>{
+      map(reponse.docs, async (doc) => {
         const favorite = doc.data();
-        const responseResto = await getDocumentById("restaurants",favorite.idRestaurant);
-        if(responseResto.statusResponse){
+        const responseResto = await getDocumentById(
+          "restaurants",
+          favorite.idRestaurant
+        );
+        if (responseResto.statusResponse) {
           result.favorites.push(responseResto.document);
         }
       })
-    )
+    );
   } catch (error) {
     result.statusResponse = false;
     result.error = error;
@@ -283,19 +290,31 @@ export const getFavorites = async () => {
   return result;
 };
 
-
 export const getTopRestaurants = async (limit) => {
-  const result = { statusResponse: true, error: null, restaurants:[] };
+  const result = { statusResponse: true, error: null, restaurants: [] };
   try {
-    const response = await db.collection("restaurants")
-    .orderBy("rating","desc")
-    .limit(limit)
-    .get();
-    response.forEach((doc)=>{
+    const response = await db
+      .collection("restaurants")
+      .orderBy("rating", "desc")
+      .limit(limit)
+      .get();
+    response.forEach((doc) => {
       const restaurant = doc.data();
       restaurant.id = doc.id;
       result.restaurants.push(restaurant);
-    })
+    });
+  } catch (error) {
+    result.statusResponse = false;
+    result.error = error;
+  }
+  return result;
+};
+
+export const searchRestaurants = async (word) => {
+  console.log(word)
+  const result = { statusResponse: true, error: null, restaurants: [] };
+  try {
+    result.restaurants = await fireSQL.query(`SELECT * FROM restaurants WHERE name LIKE '${word}%'`)
   } catch (error) {
     result.statusResponse = false;
     result.error = error;
