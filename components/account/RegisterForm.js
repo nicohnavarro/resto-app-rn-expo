@@ -2,9 +2,14 @@ import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Input, Button, Icon } from "react-native-elements";
 import { size } from "lodash";
-import {useNavigation} from '@react-navigation/native'
+import { useNavigation } from "@react-navigation/native";
 import { validateEmail } from "../../utils/helpers";
-import { registerUser } from "../../utils/actions";
+import {
+  addDocumentWithId,
+  getCurrentUser,
+  getToken,
+  registerUser,
+} from "../../utils/actions";
 import Loading from "../Loading";
 
 export default function RegisterForm() {
@@ -13,8 +18,8 @@ export default function RegisterForm() {
   const [errorCorreo, setErrorCorreo] = useState("");
   const [errorClave, setErrorClave] = useState("");
   const [errorConfirm, setErrorConfirm] = useState("");
-  const [loading,setLoading] = useState(false)
-  const navigator =useNavigation()
+  const [loading, setLoading] = useState(false);
+  const navigator = useNavigation();
 
   const onChange = (e, type) => {
     setFormData({ ...formData, [type]: e.nativeEvent.text });
@@ -22,17 +27,28 @@ export default function RegisterForm() {
 
   const register = async () => {
     if (!validateData()) {
-      return
+      return;
     }
-    setLoading(true)
-    const result = await registerUser(formData.correo,formData.clave)
-    setLoading(false)
-    if(!result.statusResponse){
-      setErrorCorreo(result.error) 
-      return
+    setLoading(true);
+    const result = await registerUser(formData.correo, formData.clave);
+    if (!result.statusResponse) {
+      setLoading(false);
+      setErrorCorreo(result.error);
+      return;
     }
 
-    navigator.navigate("account")
+    const token = await getToken();
+    const resultUser = await addDocumentWithId(
+      "users",
+      { token },
+      getCurrentUser().uid
+    );
+    if (resultUser.statusResponse) {
+      setLoading(false);
+      setErrorCorreo(result.error);
+    }
+    setLoading(false);
+    navigator.navigate("account");
   };
 
   const validateData = () => {
@@ -114,7 +130,7 @@ export default function RegisterForm() {
         title="Registar"
         onPress={() => register()}
       />
-      <Loading isVisible={loading} text="Creando cuenta..."/>
+      <Loading isVisible={loading} text="Creando cuenta..." />
     </View>
   );
 }
