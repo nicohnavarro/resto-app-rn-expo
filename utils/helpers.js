@@ -1,6 +1,6 @@
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
-import * as Camera from "expo-camera";
+import {Camera} from "expo-camera";
 import * as Location from "expo-location";
 import { Alert, Linking } from "react-native";
 
@@ -13,7 +13,10 @@ export function validateEmail(email) {
 export const loadImageFromGallery = async (array) => {
   const response = { status: false, image: null };
   const resultPermissions = await Permissions.askAsync(Permissions.CAMERA);
-  if (resultPermissions.status === "denied") {
+  const cameraPermissions = await Camera.requestPermissionsAsync();
+  console.log(cameraPermissions);
+  const resultPermi = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
+  if (cameraPermissions.status === "denied") {
     Alert.alert("Debes darle permiso para acceder a las imagenes");
     return response;
   }

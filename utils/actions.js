@@ -275,7 +275,7 @@ export const getFavorites = async () => {
       .where("idUser", "==", getCurrentUser().uid)
       .get();
     await Promise.all(
-      map(reponse.docs, async (doc) => {
+      map(response.docs, async (doc) => {
         const favorite = doc.data();
         const responseResto = await getDocumentById(
           "restaurants",
@@ -416,4 +416,27 @@ export const setNotificationMessage = (token, title, body, data) => {
     data: data,
   };
   return message;
+};
+
+export const getUsersFavorites = async (restaurantId) => {
+  const result = { statusResponse: true, error: null, users: [] };
+  try {
+    const response = await db
+      .collection("favorites")
+      .where("idRestaurant", "==", restaurantId)
+      .get();
+    await Promise.all(
+      map(response.docs, async (doc) => {
+        const favorite = doc.data();
+        const user = await getDocumentById("users", favorite.idUser);
+        if (user.statusResponse) {
+          result.users.push(user.document);
+        }
+      })
+    );
+  } catch (err) {
+    result.statusResponse = false;
+    result.error = err;
+  }
+  return result;
 };

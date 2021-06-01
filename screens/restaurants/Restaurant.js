@@ -1,9 +1,10 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { StyleSheet, Text, View, Alert, Dimensions } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { Rating, ListItem, Icon } from "react-native-elements";
+import { Rating, ListItem, Icon, Input, Button } from "react-native-elements";
 import CarouselImages from "../../components/CarouselImages";
 import Loading from "../../components/Loading";
+import Modal from "../../components/Modal";
 import MyCarousel from "../../components/MyCarousel";
 import {
   addDocumentWithoutId,
@@ -13,6 +14,7 @@ import {
   deleteFavorite,
   sendPushNotification,
   setNotificationMessage,
+  getUsersFavorites,
 } from "../../utils/actions";
 import {
   callNumber,
@@ -21,7 +23,7 @@ import {
   sendWhatsApp,
 } from "../../utils/helpers";
 import MapRestaurant from "../../components/restaurants/MapRestaurant";
-import { map } from "lodash";
+import { isEmpty, map, set } from "lodash";
 import ListReviews from "../../components/restaurants/ListReviews";
 import { useFocusEffect } from "@react-navigation/native";
 import firebase from "firebase/app";
@@ -38,6 +40,7 @@ export default function Restaurant({ navigation, route }) {
   const [isLogged, setIsLogged] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [modalNotification, setModalNotification] = useState(false);
 
   firebase.auth().onAuthStateChanged((user) => {
     user ? setIsLogged(true) : setIsLogged(false);
@@ -142,10 +145,17 @@ export default function Restaurant({ navigation, route }) {
         phone={formatPhone(restaurant.callingCode, restaurant.phone)}
         currentUser={currentUser}
         setLoading={setLoading}
+        setModalNotification={setModalNotification}
       />
       <ListReviews navigation={navigation} idRestaurant={restaurant.id} />
+      <SendMessage
+        modalNotification={modalNotification}
+        setModalNotification={setModalNotification}
+        setLoading={setLoading}
+        restaurant={restaurant}
+      />
       <Toast ref={toastRef} position="center" opacity={0.8} />
-      <Loading isVisible={loading} text="Cargando favoritos" />
+      <Loading isVisible={loading} text="Espere un momento por favor" />
     </ScrollView>
   );
 }
@@ -174,7 +184,8 @@ function RestaurantInfo({
   email,
   phone,
   currentUser,
-  setLoading
+  setLoading,
+  setModalNotification,
 }) {
   const listInfo = [
     {
@@ -226,32 +237,7 @@ function RestaurantInfo({
         );
       }
     } else if (type === "address") {
-      sendNotification();
-    }
-  };
-
-  const sendNotification = async () => {
-    setLoading(true);
-    const resultToken = await getDocumentById("users", getCurrentUser().uid);
-    if (!resultToken.statusResponse) {
-      setLoading(false);
-      Alert.alert("No se pudo obtener el token del usuario.");
-      return;
-    }
-
-    const messageNotification = setNotificationMessage(
-      resultToken.document.token,
-      "Titulo de prueba",
-      "Mensaje de prueba",
-      { data: "data de prueba" }
-    );
-
-    const response = await sendPushNotification(messageNotification);
-    setLoading(false);
-    if(response){
-      Alert.alert("Se ha enviado el mensaje");
-    }else {
-      Alert.alert("Ocurrio un problema enviando el mensaje");
+      setModalNotification(true);
     }
   };
 
@@ -283,6 +269,100 @@ function RestaurantInfo({
         </ListItem>
       ))}
     </View>
+  );
+}
+
+function SendMessage({
+  modalNotification,
+  setModalNotification,
+  setLoading,
+  restaurant,
+}) {
+  const [title, setTitle] = useState(null);
+  const [errorTitle, setErrorTitle] = useState(null);
+  const [message, setMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  const sendNotification = async () => {
+    if (!isValidForm()) return;
+
+    setLoading(true);
+    const userName = getCurrentUser().displayName
+      ? getCurrentUser().displayName
+      : "Anonimo";
+    const theMessage = `${message}, del restaurante ${restaurant.name}`;
+
+    const usersFavorites = await getUsersFavorites(restaurant.id);
+    if (!usersFavorites.statusResponse) {
+      setLoading(false);
+      Alert.alert("Error al obtener los usuarios que aman el restaurante");
+      return;
+    }
+
+    await Promise.all(
+      map(usersFavorites.users, async (user) => {
+        const messageNotification = setNotificationMessage(
+          user.token,
+          `${userName} dijo: ${title}`,
+          theMessage,
+          { data: theMessage }
+        );
+        await sendPushNotification(messageNotification);
+      })
+    );
+    setLoading(false);
+    Alert.alert("Se ha enviado el mensaje");
+    cleanInputs();
+  };
+
+  const cleanInputs = () => {
+    setTitle(null);
+    setMessage(null);
+    setErrorTitle(null);
+    setErrorMessage(null);
+    setModalNotification(false);
+  };
+
+  const isValidForm = () => {
+    let isValid = true;
+    if (isEmpty(title)) {
+      setErrorTitle("Debes ingresar un titulo a tu mensaje");
+      isValid = false;
+    }
+    if (isEmpty(message)) {
+      setErrorMessage("Debes ingresar un mensaje");
+      isValid = false;
+    }
+    return isValid;
+  };
+
+  return (
+    <Modal isVisible={modalNotification} setVisible={setModalNotification}>
+      <View style={styles.modalContainer}>
+        <Text style={styles.textModal}>
+          Enviale un mensaje a los amantes de {restaurant.name}
+        </Text>
+        <Input
+          placeholder="Titulo del mensaje.."
+          onChangeText={(text) => setTitle(text)}
+          value={title}
+          errorMessage={errorTitle}
+        />
+        <Input
+          inputStyle={styles.textArea}
+          placeholder="Tu mensaje.."
+          onChangeText={(text) => setMessage(text)}
+          value={message}
+          errorMessage={errorMessage}
+        />
+        <Button
+          title="Enviar mensaje"
+          buttonStyle={styles.btnSend}
+          containerStyle={styles.btnSendContainer}
+          onPress={sendNotification}
+        />
+      </View>
+    </Modal>
   );
 }
 
@@ -331,5 +411,24 @@ const styles = StyleSheet.create({
     padding: 5,
     paddingLeft: 15,
     zIndex: 100,
+  },
+  textArea: {
+    height: 50,
+    paddingHorizontal: 10,
+  },
+  btnSend: {
+    backgroundColor: "#434243",
+  },
+  btnSendContainer: {
+    width: "50%",
+  },
+  textModal: {
+    color: "#000",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  modalContainer: {
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

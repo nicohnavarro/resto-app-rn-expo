@@ -257,6 +257,7 @@ function ImageRestaurant({ imageRestaurant }) {
 }
 
 function UploadImage({ toastRef, imagesSelected, setImagesSelected }) {
+  
   const selectImage = async () => {
     const response = await loadImageFromGallery([4, 3]);
     if (!response.status) {

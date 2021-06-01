@@ -1,10 +1,16 @@
 {
   "expo": {
-    "name": "resto-app",
+    "name": "Green Fork",
     "slug": "resto-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "notification":{
+      "icon": "./assets/icon.png",
+      "color": "#002C56",
+      "iosDisplayInForeground": true,
+      "androidMode": "default"
+    },
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -32,6 +38,7 @@
         }
       },
       "permissions":[
+        "CAMERA",
         "CAMERA_ROLL",
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE",
