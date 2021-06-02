@@ -13,21 +13,57 @@ export default function RestaurantsStack() {
       <Stack.Screen
         name="restaurants"
         component={Restaurants}
-        options={{ title: "Restaurantes" }}
+        options={{
+          title: "Restaurantes",
+          headerStyle: {
+            backgroundColor: "#a3bf45",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
       />
       <Stack.Screen
         name="add-restaurant"
         component={AddRestaurant}
-        options={{ title: "Agregar Restaurante" }}
+        options={{
+          title: "Agregar Restaurante",
+          headerStyle: {
+            backgroundColor: "#a3bf45",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
       />
       <Stack.Screen
         name="restaurant"
         component={Restaurant}
+        options={{
+          headerStyle: {
+            backgroundColor: "#a3bf45",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
       />
       <Stack.Screen
         name="add-review-restaurant"
         component={AddReviewRestaurant}
-        options={{ title: "Nuevo Comentario" }}
+        options={{
+          title: "Nuevo Comentario",
+          headerStyle: {
+            backgroundColor: "#a3bf45",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
       />
     </Stack.Navigator>
   );

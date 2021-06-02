@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1074252796263",
+    "project_id": "nn-restaurants",
+    "storage_bucket": "nn-restaurants.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1074252796263:android:0a2467327281b631939fc2",
+        "android_client_info": {
+          "package_name": "com.nicohnavarro.restaurants"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1074252796263-ivoq4053ao04m05geth5u332msfb95o7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-zr48c4dI-QiIB5wSnVxnDzT9gp-lI6c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1074252796263-ivoq4053ao04m05geth5u332msfb95o7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

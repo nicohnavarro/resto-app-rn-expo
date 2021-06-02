@@ -60,13 +60,13 @@ const styles = StyleSheet.create({
     height:20,
     borderRadius:10,
     marginHorizontal:2,
-    backgroundColor: "yellow"
+    backgroundColor: "#3C5A14"
   },
   dotInactive:{
     width:14,
     height:14,
     borderRadius:7,
     marginHorizontal:2,
-    backgroundColor: "#fff"
+    backgroundColor: "#71B340"
   }
 })

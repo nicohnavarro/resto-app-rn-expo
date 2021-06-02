@@ -98,11 +98,12 @@ const styles = StyleSheet.create({
   },
   mustLoginText:{
     textAlign:"center",
-    color:"#a367c4",
+    color:"#3C5A14",
     padding: 20,
   },
   loginText:{
     fontWeight:"bold",
+    color:"#11270B"
   },
   viewReview:{
     flexDirection:"row",

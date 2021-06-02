@@ -399,7 +399,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   containerListItem: {
-    borderBottomColor: "#423123",
+    borderBottomColor: "#11270B",
     borderBottomWidth: 1,
   },
   viewFavorite: {

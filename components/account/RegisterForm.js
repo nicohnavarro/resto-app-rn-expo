@@ -127,7 +127,7 @@ export default function RegisterForm() {
       <Button
         containerStyle={styles.btnRegister}
         buttonStyle={styles.btn}
-        title="Registar"
+        title="Registrar"
         onPress={() => register()}
       />
       <Loading isVisible={loading} text="Creando cuenta..." />

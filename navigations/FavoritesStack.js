@@ -1,17 +1,26 @@
-import React from 'react'
-import { createStackNavigator} from '@react-navigation/stack'
-import Favorites from '../screens/Favorites'
+import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import Favorites from "../screens/Favorites";
 
-const Stack = createStackNavigator()
+const Stack = createStackNavigator();
 
 export default function FavoritesStack() {
-    return (
-        <Stack.Navigator>
-            <Stack.Screen
-                name="favorites"
-                component={Favorites}
-                options={{title:"Favoritos"}}
-            />
-        </Stack.Navigator>
-    )
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="favorites"
+        component={Favorites}
+        options={{
+          title: "Favoritos",
+          headerStyle: {
+            backgroundColor: "#a3bf45",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+        }}
+      />
+    </Stack.Navigator>
+  );
 }

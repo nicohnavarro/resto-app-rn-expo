@@ -440,3 +440,14 @@ export const getUsersFavorites = async (restaurantId) => {
   }
   return result;
 };
+
+export const sendEmailResetPasword = async (email) => {
+  const result = { statusResponse: true, error: null };
+  try {
+    await firebase.auth().sendPasswordResetEmail(email);
+  } catch (err) {
+    result.statusResponse = false;
+    result.error = err;
+  }
+  return result;
+};
